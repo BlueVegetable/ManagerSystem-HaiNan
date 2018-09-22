@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        易动科技  V1.0
+    </title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="./css/x-admin.css" media="all">
+    <link rel="stylesheet" href="./layui/css/layui.css"  media="all">
+
+    <style type="text/css">
+        .imgBox {
+            height: 150px;
+            width: 150px;
+            background: url("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2454388039,3110293780&fm=26&gp=0.jpg");
+            background-size: 100% 100%;
+            position: relative;
+            background-repeat: no-repeat;
+        }
+
+        .imgIcon {
+            width: 20px;
+            height: 20px;
+            background: url('./img/icon.png');
+            background-size: 100% 100%;
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            cursor: pointer;
+        }
+    </style>
+    <script src="js/url.js" type="text/javascript"></script>
+    <script src="js/function.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        window.onload=function () {
+            var cityId=getParameter(window.location.href,"cityId");
+            document.getElementById("hiddened").innerHTML+="<input type='hidden' name='cityId' value='"+cityId+"' />";
+        }
+    </script>
+</head>
+<body>
+<div class="x-nav">
+            <span class="layui-breadcrumb">
+              <a><cite>首页</cite></a>
+              <a><cite>产品管理</cite></a>
+              <a><cite>添加商品</cite></a>
+            </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+
+<div class="x-body">
+</div>
+
+<form class="layui-form" id="myform" action="">
+
+    <input type="hidden" name="id" value="" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入商品名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">商品类别</label>
+            <div class="layui-input-inline">
+                <select name="bigType" lay-filter="bigType" lay-search="">
+                    <option value="">请选择大类</option>
+                    <option value="1">产品品牌</option>
+                    <option value="2">鸭副类</option>
+                    <option value="3">鸡副类</option>
+                    <option value="4">鹅鸽类</option>
+                    <option value="5">猪副类</option>
+                    <option value="6">牛副类</option>
+                    <option value="7">羊兔类</option>
+                    <option value="8">水产类</option>
+                    <option value="9">火锅类</option>
+                    <option value="10">面条类</option>
+                    <option value="11">烧烤串类</option>
+                    <option value="12">粮油类</option>
+                    <option value="13">水果类</option>
+                    <option value="14">蔬菜类</option>
+                    <option value="15">调料类</option>
+                    <option value="16">腌熏类</option>
+                    <option value="17">小吃类</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <select name="smallType" id="smallType" lay-filter="required" lay-search="">
+                    <option value="">请选择二级类</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">请上传封面</label>
+            <div class="layui-input-inline">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-normal" id="cover-image-upload">
+                        <i class="layui-icon">&#xe67c;</i>上传商品封面
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <fieldset class="layui-elem-field">
+        <legend>封面图片</legend>
+        <div class="layui-field-box" id="cover-image-show">
+            <!--<div class="imgBox" style="background:url('http://dongpinhui.xyz/91d47f8cfd31407e9439d7134fb79f82');background-size: 100% 100%;display: inline-block;">-->
+                <!--<div class="imgIcon" onclick="deleteCoverImage()"></div>-->
+            <!--</div>-->
+        </div>
+    </fieldset>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">请上传图片</label>
+            <div class="layui-input-inline">
+                <div class="layui-upload">
+                    <button type="button" name="file" class="layui-btn layui-btn-normal" id="images" >选择图片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <fieldset class="layui-elem-field">
+        <legend>已上传的图片</legend>
+        <div class="layui-field-box" id="image-show">
+        </div>
+    </fieldset>
+
+    <!--<div class="layui-form-item">-->
+        <!--<div class="layui-inline">-->
+            <!--<div class="layui-input-inline">-->
+                <!--<img src="http://pbvxr9z7k.bkt.clouddn.com/755931b0a44e4f26b53307386d2efc6b" width="150px" height="150px" />-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="layui-form-item">-->
+    <!--</div>-->
+
+    <table id="price-list" style="align:center;" cellspacing="10px">
+        <tr id="trone_0">
+            <td>
+                <label class="layui-form-label">规格1</label>
+            </td>
+            <td>
+                <div class="layui-input-inline">
+                    <input type="text" name="price" placeholder="请输入价格" lay-verify="price" autocomplete="off" class="layui-input">
+                </div>
+            </td>
+            <td>
+                <div class="layui-input-inline">
+                    <input type="text" name="num" placeholder="请输入数量" lay-verify="num" autocomplete="off" class="layui-input">
+                </div>
+            </td>
+            <td>
+                <div class="layui-input-inline">
+                    <input type="text" name="weight" placeholder="请输入重量" lay-verify="weight" autocomplete="off" class="layui-input">
+                </div>
+            </td>
+            <td>
+                <div class="layui-input-inline">
+                    <input type="text" name="unit" placeholder="请输入单位" lay-verify="unit" autocomplete="off" class="layui-input">
+                </div>
+            </td>
+            <td class="layui-inline">
+                <a class="layui-btn layui-btn-sm layui-btn-normal" onclick="addRow()">增加</a>
+            </td>
+    </table>
+    <br><br>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">生产工厂</label>
+            <div class="layui-input-inline">
+                <input type="text" name="factory" placeholder="请输入工厂名" lay-verify="factory" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">品牌</label>
+            <div class="layui-input-inline">
+                <input type="text" name="brand" placeholder="请输入商品品牌" lay-verify="brand" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">商品状态</label>
+            <div class="layui-input-inline">
+                <select name="state" lay-verify="state" lay-search="">
+                    <option value="">请选择商品状态</option>
+                    <option value="0">下架</option>
+                    <option value="1">上架</option>
+                    <option value="2">推荐</option>
+                    <option value="3">促销</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">保质期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="shelfLife" placeholder="请输入商品保质期(如：***天" lay-verify="shelfLife" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">存储方法</label>
+        <div class="layui-input-block">
+            <input type="text" name="storage" lay-verify="storage" autocomplete="off" placeholder="请输入商品存储方法(如：室温存储)" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入商品备注信息" class="layui-textarea" name="remarks"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-inline" style="display:none;">
+        <label class="layui-form-label">隐藏字段</label>
+        <div class="layui-input-inline" id="hiddened">
+
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="submit" lay-filter="demo1" id="submit">提交</button>
+            <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+    <!-- 隐藏字段 -->
+    <input type="hidden" id="cover-image-value" name="coverImageValue" value="" lay-verify="confirmUpload" >
+    <div class="layui-form-item" style="display: none;" id="picture-address">
+
+    </div>
+</form>
+
+<script src="./layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        upload.render({
+            elem: '#cover-image-upload' //绑定元素
+            ,url: remoteURL+"/GoodsPicture/uploadPicture"
+            ,auto: true
+            ,accept:'image'
+            ,size:1024
+            ,exts:'png|jpg|bmp|jpeg|gif'
+            // ,multiple: true
+            // ,bindAction: '#submit'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                console.log(res);
+                layer.closeAll('loading'); //关闭loading
+                document.getElementById("cover-image-show").innerHTML=
+                    "<div id=\"coverImageElement\" class=\"imgBox\" style=\"background: url(\'"+res.data+"\');" +
+                    "background-size: 100% 100%;\">" +
+                    "<div class=\"imgIcon\" onclick=\"deleteCoverImage()\">" +
+                    "</div></div>";
+                document.getElementById("cover-image-value").value=res.data;
+                // alert(res.data);
+            }
+            ,error: function(res,data){
+                layer.closeAll('loading'); //关闭loading
+                layer.msg("上传图片过大");
+            }
+        });
+    });
+</script>
+<script>
+
+    layui.use(['form', 'layedit', 'laydate','upload','element','laypage','layer'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,upload = layui.upload
+            ,laydate = layui.laydate;
+
+        layer.ready(function(){ //为了layer.ext.js加载完毕再执行
+            layer.photos({
+                photos: '#x-img'
+                //,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+            });
+        });
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            name: function(value){
+                if(value.length < 2){
+                    return '商品名称至少得2个字符啊';
+                }
+            }
+            ,content: function(value){
+                layedit.sync(editIndex);
+            }
+            ,factory:function (value) {
+                if(value.length<=0) {
+                    return '请输入工厂名';
+                }
+            }
+            ,brand:function(value) {
+                if(value.length<=0) {
+                    return "请输入商品品牌";
+                }
+            }
+            ,shelfLife:function (value) {
+                if(value.length<=0) {
+                    return "请输入商品保质期";
+                }
+            }
+            ,storage:function (value) {
+                if(value.length<=0) {
+                    return "请输入商品存储方法";
+                }
+            }
+            ,state:function (value) {
+                if(value=="")
+                    return "请选择商品状态";
+            }
+            ,price:function (value) {
+                var reg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
+                if(!reg.test(value)) {
+                    return "商品价格格式输入错误";
+                }
+            }
+            ,num:function (value) {
+                var reg = /^\d{1,5}$/;
+                if(!reg.test(value)) {
+                    return "商品数量格式输入错误(数量为0-99999)";
+                }
+            }
+            ,unit:function (value) {
+                if(value.length<=0) {
+                    return "请输入商品的重量单位";
+                }
+            }
+            ,confirmUpload:function (value) {
+                if(value.length<=0)
+                    return "请上传商品封面图片";
+            }
+        });
+
+        form.on('select(bigType)',function (data) {
+            $.ajax({
+                type: "POST",
+                url:  remoteURL+"/SmallType/selectByBigId",
+                data: {bigId:data.value},
+                dataType: "json",
+                success: function(value){
+                    document.getElementById("smallType").innerHTML="";
+                    for(var i=0;i<value.length;i++) {
+                        $("#smallType").append("<option value='"+value[i].id+"'>"+value[i].name+"</option>");
+                    }
+                    form.render('select');
+                }
+            });
+        });
+
+        //监听指定开关
+        form.on('switch(switchTest)', function(data){
+            layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            // layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+            // });
+            var all=getObject(data.field);
+            delete all.file;
+            delete all.picture;
+            delete all.weight;
+            delete all.unit;
+            delete all.confirmUpload;
+            delete all.smallType;
+            delete all.bigType;
+            delete all.coverImageValue;
+
+            console.log(JSON.stringify(all));
+
+            $.ajax({
+                type : "POST",
+                url : remoteURL+"/Goods/addGoods",
+                data : JSON.stringify(all),
+                contentType : "application/json",
+                dataType : "json",
+                success:function (res) {
+                    if(res==0) {
+                        layer.alert("添加失败", {icon: 6});
+                    }
+                    else {
+						layer.msg("添加成功", {icon: 6});
+                        setTimeout("location.reload()",4000);
+                    }
+                }
+            });
+            // alert(JSON.stringify(all));
+            return false;
+        });
+
+        upload.render({
+            elem: '#images'
+            ,url: remoteURL+"/GoodsPicture/uploadPicture"
+            ,auto: true
+            ,multiple:true
+            ,accept:'image'
+            ,size:1024
+            ,exts:'png|jpg|bmp|jpeg|gif'
+            // ,multiple: true
+            // ,bindAction: '#submit'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                console.log(res);
+                layer.closeAll('loading'); //关闭loading
+                var id = initString(res.data);
+                document.getElementById("image-show").innerHTML+="&emsp;"+getImageElement(res.data,id);
+                    // "<img src=\""+res.data+"\" height=\"150px\" />";
+                document.getElementById("picture-address").innerHTML+=
+                    "<input id='imageElementName"+id+"' type=\"hidden\" name=\"picture\" value=\""+res.data+"\" />";
+                // alert(res.data);
+            }
+            ,error: function(res,data){
+                layer.closeAll('loading'); //关闭loading
+                layer.msg("上传图片过大");
+            }
+        });
+
+    });
+    //整理上传给后台的数据
+    function getObject(data) {
+        var list=new Array();
+        var prices=document.getElementsByName("price");
+        var nums=document.getElementsByName("num");
+        var weights=document.getElementsByName("weight");
+        var units=document.getElementsByName("unit");
+        for(var i=0;i<prices.length;i++) {
+            var object=new Object();
+            object.id="";
+            object.num=nums[i].value;
+            object.unit=units[i].value;
+            object.price=prices[i].value;
+            object.weight=weights[i].value;
+            list.push(object);
+        }
+        data.listPrice=list;
+
+        var picturesList=new Array();
+        var pictures=document.getElementsByName("picture");
+        {
+            //进行封面设置
+            var object=new Object();
+            var picture = document.getElementById("cover-image-value");
+            object.id="";
+            object.address=picture.value;
+            object.goodsId="";
+            picturesList.push(object);
+        }
+        for (var i=0;i<pictures.length;i++) {
+            var object=new Object();
+            object.id="";
+            object.address=pictures[i].value;
+            object.goodsId="";
+            picturesList.push(object);
+        }
+        data.list=picturesList;
+
+        var listType=new Object();
+        listType.typeId=document.getElementById("smallType").value;
+        listType.id="";
+        listType.goodsId="";
+        data.listType=listType;
+
+        return data;
+    }
+</script>
+<script type="text/javascript" >
+    function addRow() {
+        var priceTable = document.getElementById("price-list");
+        var y = priceTable.insertRow(-1);
+        var addNum = $("#price-list").find("tr").length-1;
+        y.id ="trone_" + addNum;
+
+        var a = y.insertCell(0);
+        var b = y.insertCell(1);
+        var c = y.insertCell(2);
+        var d = y.insertCell(3);
+        var e = y.insertCell(4);
+        var f = y.insertCell(5);
+
+        a.innerHTML="<td><label class=\"layui-form-label\">"+"规格"+(addNum+1)+"</label></label></td>";
+        b.innerHTML="<td><div class=\"layui-input-inline\">"+
+            "<input type=\"text\" name=\"price\" placeholder=\"请输入价格\" lay-verify=\"price\" autocomplete=\"off\" class=\"layui-input\">"+
+            "</div></td>";
+        c.innerHTML="<td><div class=\"layui-input-inline\">" +
+            "<input type=\"text\" name=\"num\" placeholder=\"请输入数量\" lay-verify=\"num\" autocomplete=\"off\" class=\"layui-input\">" +
+            "</div></td>";
+        d.innerHTML="<td><div class=\"layui-input-inline\">" +
+            "<input type=\"text\" name=\"weight\" placeholder=\"请输入重量\" lay-verify=\"weight\" autocomplete=\"off\" class=\"layui-input\">" +
+            "</div></td>";
+        e.innerHTML="<td><div class=\"layui-input-inline\">" +
+            "<input type=\"text\" name=\"unit\" placeholder=\"请输入单位\" lay-verify=\"unit\" autocomplete=\"off\" class=\"layui-input\">" +
+            "</div></td>";
+        f.innerHTML="<td>"+
+            "<a class=\"layui-btn layui-btn-sm layui-btn-normal\" onclick=\"addRow()\">增加</a>"+
+            "<a class=\"layui-btn layui-btn-sm layui-btn-danger\" onclick=\"deleteRow('" +y.id+"');\">删除</a>"+
+            "</td>";
+    }
+    function deleteRow(rowId){
+        $("tr[id="+rowId+"]").remove();
+    }
+    function getImageElement(url,id) {
+        var string = "<div id='imageElement"+id+"' class=\"imgBox\" style='background: url(\""+url+"\"); background-size: 100% 100%;display: inline-block'>\n" +
+            "<div class=\"imgIcon\" onclick=\"deleteImageElement(\'"+id+"\')\"></div></div>";
+        return string;
+    }
+    function deleteImageElement(id) {
+        $("#imageElement"+id).remove();
+        $("#imageElementName"+id).remove();
+    }
+    function deleteCoverImage() {
+        $("#coverImageElement").remove();
+        $("#cover-image-value").val("");
+    }
+    function initString(string) {
+        var newString = string.substring(string.lastIndexOf("/")+1);
+        return newString;
+    }
+</script>
+</body>
+</html>

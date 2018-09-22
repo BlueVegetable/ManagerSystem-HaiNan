@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="./layui/css/layui.css"  media="all">
+
+    <title>订单统计</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/url.js"></script>
+    <script src="./js/function.js"></script>
+    <script>
+        var cityId=getParameter(window.location.href,"cityId");
+    </script>
+    <style>
+        .box {
+            height: 850px;
+            width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #mainTop {
+            margin: 0 auto;
+            height: 400px;
+            width: 70%;
+        }
+
+        #mainBottom {
+            margin: 0 auto;
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<form class="layui-form" action="">
+    <div class="layui-inline">
+        <label class="layui-form-label">统计周次</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="month1" placeholder="请选择日期">
+        </div>
+    </div>
+</form>
+<div>
+    <div id="mainTop"></div>
+</div>
+<hr>
+<form class="layui-form" action="">
+    <div class="layui-inline">
+        <label class="layui-form-label">统计年份</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="month2" placeholder="请选择日期">
+        </div>
+    </div>
+</form>
+<div>
+    <div id="mainBottom"></div>
+</div>
+
+<script src="./layui/layui.js" charset="utf-8"></script>
+<script>
+    var url1 = remoteURL+'/OrderForm/selectWeek';
+    var url2 = remoteURL+'/OrderForm/selectYear';
+
+    var date = new Date();
+    date=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+
+    $("#month1").val(date);
+    $("#month2").val(new Date().getFullYear());
+
+    var Top = echarts.init(document.getElementById('mainTop'));
+    var Bottom = echarts.init(document.getElementById('mainBottom'));
+
+    Promise.all([
+        $.post(url1, { createTime: date, cityId : cityId }),
+        $.post(url2, { cityId: cityId, createTime: date }),
+    ]).then(res => {
+        var name1 = [], number1 = [];
+        var name2 = [], number3 = [];
+
+        name1.push("星期日");name1.push("星期一");name1.push("星期二");name1.push("星期三");
+        name1.push("星期四");name1.push("星期五");name1.push("星期六");
+        for(var i=0;i<7;i++) {
+            if(!res[0][i])
+                res[0][i]=0;
+        }
+        for(var i=0;i<7;i++) {
+            number1.push(res[0][i]);
+        }
+
+        for(var i=1;i<=12;i++) {
+            name2.push(i+"月");
+            if(!res[1][i])
+                res[1][i]=0;
+        }
+        for(var i=1;i<=12;i++) {
+            number3.push(res[1][i]);
+        }
+        options1.series[0].data = number1;
+        options1.xAxis[0].data = name1;
+        options2.series[0].data = number3;
+        options2.xAxis[0].data = name2;
+        Top.setOption(options1);
+        Bottom.setOption(options2);
+        }).catch(err => {
+            console.log(err)
+        });
+
+    layui.use('laydate',function () {
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#month1',
+            type: 'date',
+            done: function (value,date) {
+                var date_string=date.year+"-"+date.month+"-"+date.date;
+                Promise.all([
+                    $.post(url1,{ cityId:cityId , createTime:date_string })
+                ]).then(res => {
+                    var name1 = [],number1=[];
+                    name1.push("星期日");name1.push("星期一");name1.push("星期二");name1.push("星期三");
+                    name1.push("星期四");name1.push("星期五");name1.push("星期六");
+                    for(var i=0;i<7;i++) {
+                        if(!res[0][i])
+                            res[0][i]=0;
+                    }
+                    for(var i=0;i<7;i++) {
+                        number1.push(res[0][i]);
+                    }
+                    options1.series[0].data=number1;
+                    options1.xAxis[0].data=name1;
+                    Top.setOption(options1);
+                }).catch(err =>{
+                    console.log(err)
+                });
+            }
+        });
+
+        laydate.render({
+            elem: '#month2',
+            type: 'year',
+            done: function (value,date) {
+                var date_string=date.year+"-1-1";
+                Promise.all([
+                    $.post(url2,{ cityId:cityId , createTime:date_string })
+                ]).then(res => {
+                    var name2 = [],number3=[];
+                    for(var i=1;i<=12;i++) {
+                        if(!res[0][i])
+                            res[0][i]=0;
+                        name2.push(i+"月");
+                    }
+                    for(var i=1;i<=12;i++) {
+                        number3.push(res[0][i]);
+                    }
+                    options2.series[0].data=number3;
+                    options2.xAxis[0].data=name2;
+                    Bottom.setOption(options2);
+            }).catch(err =>{
+                    console.log(err);
+            });
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
